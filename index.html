@@ -10,41 +10,36 @@
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
+.month-nav{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:12px;
+margin-bottom:20px;
 }
 
-body{
-background:#0f172a;
-color:#e2e8f0;
-padding:20px;
-max-width:1200px;
-margin:auto;
-}
-.month-btn{
-width:50px;
-height:50px;
-border:none;
-border-radius:50%;
-background:#1e293b;
-color:#ffffff;
-font-size:24px;
+.month{
+font-size:28px;
 font-weight:700;
+color:#ffffff;
+min-width:220px;
+text-align:center;
+}
+
+.month-btn{
+background:none;
+border:none;
+color:#ffffff;
+font-size:32px;
+font-weight:bold;
 cursor:pointer;
-border:1px solid #334155;
-display:flex;
-align-items:center;
-justify-content:center;
-transition:all .25s ease;
-box-shadow:0 4px 10px rgba(0,0,0,.25);
+padding:0 10px;
+transition:.2s;
 }
 
 .month-btn:hover{
-background:#2563eb;
-transform:scale(1.08);
+color:#60a5fa;
+transform:scale(1.2);
 }
 
 .month-btn:active{
@@ -191,16 +186,15 @@ margin-bottom:10px;
 
 <div class="month-nav">
     <button onclick="gantiBulan(-1)" class="month-btn">
-        &#10094;
+        ❮
     </button>
 
-    <div class="month" id="bulan"></div>
+    <span class="month" id="bulan"></span>
 
     <button onclick="gantiBulan(1)" class="month-btn">
-        &#10095;
+        ❯
     </button>
 </div>
-
 <div class="stats" id="stats"></div>
 
 <div class="table-container">
