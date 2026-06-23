@@ -1,0 +1,16 @@
+{
+  "name": "Target Bulanan",
+  "short_name": "Target",
+  "description": "Pencatatan Target Harian",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
