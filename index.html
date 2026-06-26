@@ -2,489 +2,430 @@
 <html lang="id">
 <head>
     <link rel="manifest" href="manifest.json">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Target Bulanan</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Target Bulanan</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-    
-    *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-body{
-background:#0f172a;
-color:#e2e8f0;
-padding:20px;
-max-width:1200px;
-margin:auto;
+body {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 20px;
+    max-width: 1200px;
+    margin: auto;
 }
 
-.month-nav{
-display:flex;
-justify-content:center;
-align-items:center;
-gap:8px;
-margin-bottom:20px;
+.month-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
 }
 
-.month{
-font-size:28px;
-font-weight:700;
-color:#ffffff;
-text-align:center;
-white-space:nowrap;
+.month {
+    font-size: 30px;
+    font-weight: 700;
+    color: #ffffff;
+    min-width: 240px;
+    text-align: center;
+    white-space: nowrap;
 }
 
-.month-btn{
-background:none;
-border:none;
-color:#ffffff;
-font-size:28px;
-font-weight:bold;
-cursor:pointer;
-padding:0;
-width:35px;
-height:35px;
-display:flex;
-align-items:center;
-justify-content:center;
-transition:.2s;
+.month-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
 }
 
-.month-btn:hover{
-color:#60a5fa;
-transform:scale(1.15);
+.month-btn:hover {
+    color: #60a5fa;
+    transform: scale(1.15);
 }
 
-.month-btn:active{
-transform:scale(.95);
-}
-.month{
-font-size:30px;
-font-weight:700;
-min-width:220px;
-text-align:center;
+.month-btn:active {
+    transform: scale(.95);
 }
 
-.stats{
-display:flex;
-justify-content:center;
-gap:12px;
-margin-bottom:20px;
-flex-wrap:wrap;
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
-.stat{
-background:#1e293b;
-padding:10px 18px;
-border-radius:12px;
-border:1px solid #334155;
-font-weight:600;
+.stat {
+    background: #1e293b;
+    padding: 10px 18px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    font-weight: 600;
 }
 
-.table-container{
-background:#111827;
-border-radius:16px;
-overflow:hidden;
-border:1px solid #334155;
+.table-container {
+    background: #111827;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #334155;
 }
 
-table{
-width:100%;
-border-collapse:collapse;
-table-layout:fixed;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
 }
 
-th{
-background:#1e293b;
-padding:12px;
-border:1px solid #334155;
+th {
+    background: #1e293b;
+    padding: 12px;
+    border: 1px solid #334155;
 }
 
-td{
-height:95px;
-border:1px solid #334155;
-padding:6px;
-vertical-align:top;
-cursor:pointer;
-background:#111827;
-transition:.2s;
+td {
+    height: 95px;
+    border: 1px solid #334155;
+    padding: 6px;
+    vertical-align: top;
+    cursor: pointer;
+    background: #111827;
+    transition: .2s;
 }
 
-td:hover{
-background:#1e293b;
+td:hover {
+    background: #1e293b;
 }
 
-.success{
-background:#15803d !important;
-color:white;
+/* Style untuk cell kosong sebelum tanggal 1 */
+.empty-cell {
+    background: #0b0f19;
+    cursor: default;
+}
+.empty-cell:hover {
+    background: #0b0f19;
 }
 
-.date{
-font-size:12px;
-font-weight:700;
+.success {
+    background: #15803d !important;
+    color: white;
 }
 
-.target{
-text-align:center;
-font-size:16px;
-font-weight:700;
-margin-top:8px;
+.date {
+    font-size: 12px;
+    font-weight: 700;
 }
 
-.time{
-text-align:center;
-font-size:11px;
-margin-top:4px;
+.target {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 8px;
 }
 
-.modal{
-position:fixed;
-inset:0;
-display:none;
-justify-content:center;
-align-items:center;
-background:rgba(0,0,0,.7);
+.time {
+    text-align: center;
+    font-size: 11px;
+    margin-top: 4px;
 }
 
-.popup{
-width:320px;
-background:#111827;
-border:1px solid #334155;
-border-radius:18px;
-padding:20px;
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,.7);
+    z-index: 100;
 }
 
-.popup h3{
-text-align:center;
-margin-bottom:15px;
+.popup {
+    width: 320px;
+    background: #111827;
+    border: 1px solid #334155;
+    border-radius: 18px;
+    padding: 20px;
 }
 
-.btn{
-width:100%;
-padding:12px;
-border:none;
-border-radius:10px;
-color:white;
-font-weight:600;
-cursor:pointer;
-margin-bottom:10px;
+.popup h3 {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
-.btn2{
-background:#2563eb;
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: 0.2s;
 }
 
-.btn3{
-background:#f59e0b;
+.btn2 { background: #2563eb; }
+.btn2:hover { background: #1d4ed8; }
+.btn3 { background: #f59e0b; }
+.btn3:hover { background: #d97706; }
+
+/* Indikator tombol aktif/terpilih */
+.btn.active {
+    border-color: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    transform: scale(1.02);
 }
 
-.save{
-background:#16a34a;
+.save {
+    background: #16a34a;
+    margin-top: 10px;
 }
+.save:hover { background: #15803d; }
 
-input[type=time]{
-width:100%;
-padding:12px;
-border-radius:10px;
-border:1px solid #334155;
-background:#0f172a;
-color:white;
-margin-bottom:10px;
+input[type=time] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: white;
+    margin-bottom: 10px;
 }
-
 </style>
 </head>
 <body>
 
 <div class="month-nav">
-    <button onclick="gantiBulan(-1)" class="month-btn">
-        ❮
-    </button>
-
+    <button onclick="gantiBulan(-1)" class="month-btn">❮</button>
     <span class="month" id="bulan"></span>
-
-    <button onclick="gantiBulan(1)" class="month-btn">
-        ❯
-    </button>
+    <button onclick="gantiBulan(1)" class="month-btn">❯</button>
 </div>
+
 <div class="stats" id="stats"></div>
 
 <div class="table-container">
-<table>
-<thead>
-<tr>
-<th>Sen</th>
-<th>Sel</th>
-<th>Rab</th>
-<th>Kam</th>
-<th>Jum</th>
-<th>Sab</th>
-<th>Min</th>
-</tr>
-</thead>
-
-<tbody id="calendarBody"></tbody>
-
-</table>
+    <table>
+        <thead>
+            <tr>
+                <th>Sen</th>
+                <th>Sel</th>
+                <th>Rab</th>
+                <th>Kam</th>
+                <th>Jum</th>
+                <th>Sab</th>
+                <th>Min</th>
+            </tr>
+        </thead>
+        <tbody id="calendarBody"></tbody>
+    </table>
 </div>
 
 <div class="modal" id="modal">
-<div class="popup">
-
-<h3 id="judul"></h3>
-
-<button class="btn btn2"
-onclick="pilihTarget('2 JT')">
-Target 2 JT
-</button>
-
-<button class="btn btn3"
-onclick="pilihTarget('3 JT')">
-Target 3 JT
-</button>
-
-<input type="time" id="jam">
-
-<button class="btn save"
-onclick="simpan()">
-Simpan
-</button>
-
-</div>
+    <div class="popup">
+        <h3 id="judul"></h3>
+        
+        <button class="btn btn2" id="btn-2jt" onclick="pilihTarget('2 JT')">
+            Target 2 JT
+        </button>
+        
+        <button class="btn btn3" id="btn-3jt" onclick="pilihTarget('3 JT')">
+            Target 3 JT
+        </button>
+        
+        <input type="time" id="jam">
+        
+        <button class="btn save" onclick="simpan()">
+            Simpan
+        </button>
+    </div>
 </div>
 
 <script>
-
-const bulanIndonesia=[
-"Januari","Februari","Maret","April",
-"Mei","Juni","Juli","Agustus",
-"September","Oktober","November","Desember"
+const bulanIndonesia = [
+    "Januari","Februari","Maret","April",
+    "Mei","Juni","Juli","Agustus",
+    "September","Oktober","November","Desember"
 ];
 
-let currentDate=new Date();
+let currentDate = new Date();
+let currentMonth = currentDate.getMonth();
+let currentYear = currentDate.getFullYear();
 
-let currentMonth=currentDate.getMonth();
-let currentYear=currentDate.getFullYear();
+let tanggalAktif = 0;
+let targetAktif = "";
 
-let tanggalAktif=0;
-let targetAktif="";
+function renderCalendar() {
+    document.getElementById("bulan").innerText = bulanIndonesia[currentMonth] + " " + currentYear;
+    const tbody = document.getElementById("calendarBody");
+    tbody.innerHTML = "";
 
-function renderCalendar(){
+    // Mendapatkan total hari dalam bulan ini
+    const jumlahHari = new Date(currentYear, currentMonth + 1, 0).getDate();
+    
+    // Mendapatkan hari pertama jatuh pada hari apa (0 = Minggu, 1 = Senin, dst.)
+    let firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
+    
+    // Konversi agar Senin = 0, Selasa = 1, ..., Minggu = 6
+    let startDay = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
 
-document.getElementById("bulan").innerText=
-bulanIndonesia[currentMonth]+" "+currentYear;
+    let row = document.createElement("tr");
+    let cellCount = 0;
 
-const tbody=
-document.getElementById("calendarBody");
+    // 1. Mengisi cell kosong sebelum tanggal 1 agar posisi hari akurat
+    for (let i = 0; i < startDay; i++) {
+        const tdEmpty = document.createElement("td");
+        tdEmpty.classList.add("empty-cell");
+        row.appendChild(tdEmpty);
+        cellCount++;
+    }
 
-tbody.innerHTML="";
+    // 2. Mengisi tanggal asli 1 sampai jumlahHari
+    for (let i = 1; i <= jumlahHari; i++) {
+        // Format Key Unique: YYYY-MM-DD (Gunakan padding zero agar format seragam dan aman)
+        const key = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        const data = JSON.parse(localStorage.getItem(key)) || {};
 
-const jumlahHari=
-new Date(
-currentYear,
-currentMonth+1,
-0
-).getDate();
+        const td = document.createElement("td");
+        if (data.target) {
+            td.classList.add("success");
+        }
 
-let row=document.createElement("tr");
+        td.innerHTML = `
+            <div class="date">${i}</div>
+            <div class="target">${data.target || ""}</div>
+            <div class="time">${data.time || ""}</div>
+        `;
 
-for(let i=1;i<=jumlahHari;i++){
+        td.onclick = () => {
+            tanggalAktif = i;
+            document.getElementById("judul").innerText = "Tanggal " + i;
+            document.getElementById("jam").value = data.time || "";
+            
+            // Set target aktif sesuai data tersimpan
+            pilihTarget(data.target || "");
+            
+            document.getElementById("modal").style.style.setProperty('display', 'flex');
+        };
 
-const key=
-currentYear+"-"+currentMonth+"-"+i;
+        row.appendChild(td);
+        cellCount++;
 
-const data=
-JSON.parse(localStorage.getItem(key))
-|| {};
+        // Jika row sudah terisi 7 hari, buat baris baru
+        if (cellCount % 7 === 0) {
+            tbody.appendChild(row);
+            row = document.createElement("tr");
+        }
+    }
 
-const td=document.createElement("td");
+    // 3. Mengisi sisa cell kosong di akhir baris terakhir (jika ada)
+    if (cellCount % 7 !== 0) {
+        while (cellCount % 7 !== 0) {
+            const tdEmpty = document.createElement("td");
+            tdEmpty.classList.add("empty-cell");
+            row.appendChild(tdEmpty);
+            cellCount++;
+        }
+        tbody.appendChild(row);
+    }
 
-if(data.target){
-td.classList.add("success");
+    hitung();
 }
 
-td.innerHTML=`
-<div class="date">${i}</div>
-<div class="target">${data.target||""}</div>
-<div class="time">${data.time||""}</div>
-`;
-
-td.onclick=()=>{
-
-tanggalAktif=i;
-
-document.getElementById("judul")
-.innerText="Tanggal "+i;
-
-document.getElementById("jam")
-.value=data.time||"";
-
-targetAktif=data.target||"";
-
-document.getElementById("modal")
-.style.display="flex";
-
-};
-
-row.appendChild(td);
-
-if(i%7===0){
-
-tbody.appendChild(row);
-
-row=document.createElement("tr");
-
+function pilihTarget(target) {
+    targetAktif = target;
+    
+    // Reset status active pada tombol modal
+    document.getElementById("btn-2jt").classList.remove("active");
+    document.getElementById("btn-3jt").classList.remove("active");
+    
+    // Beri highlight pada tombol yang sesuai dengan pilihan
+    if (target === "2 JT") {
+        document.getElementById("btn-2jt").classList.add("active");
+    } else if (target === "3 JT") {
+        document.getElementById("btn-3jt").classList.add("active");
+    }
 }
 
+function simpan() {
+    if (!targetAktif) {
+        alert("Pilih target terlebih dahulu");
+        return;
+    }
+
+    const key = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(tanggalAktif).padStart(2, '0')}`;
+
+    localStorage.setItem(
+        key,
+        JSON.stringify({
+            target: targetAktif,
+            time: document.getElementById("jam").value
+        })
+    );
+
+    document.getElementById("modal").style.display = "none";
+    renderCalendar();
 }
 
-if(row.children.length>0){
-
-while(row.children.length<7){
-
-row.appendChild(
-document.createElement("td")
-);
-
+function gantiBulan(arah) {
+    currentMonth += arah;
+    if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+    }
+    if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+    }
+    renderCalendar();
 }
 
-tbody.appendChild(row);
-
+window.onclick = function(e) {
+    if (e.target.id === "modal") {
+        document.getElementById("modal").style.display = "none";
+    }
 }
 
-hitung();
+function hitung() {
+    let dua = 0;
+    let tiga = 0;
 
+    const jumlahHari = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    for (let i = 1; i <= jumlahHari; i++) {
+        const key = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+        const d = JSON.parse(localStorage.getItem(key));
+
+        if (!d) continue;
+        if (d.target === "2 JT") dua++;
+        if (d.target === "3 JT") tiga++;
+    }
+
+    let html = "";
+    if (dua > 0) html += `<div class="stat">2 JT : ${dua}</div>`;
+    if (tiga > 0) html += `<div class="stat">3 JT : ${tiga}</div>`;
+
+    document.getElementById("stats").innerHTML = html;
 }
 
-function pilihTarget(target){
-
-targetAktif=target;
-
-}
-
-function simpan(){
-
-if(!targetAktif){
-alert("Pilih target terlebih dahulu");
-return;
-}
-
-const key=
-currentYear+"-"+currentMonth+"-"+tanggalAktif;
-
-localStorage.setItem(
-key,
-JSON.stringify({
-target:targetAktif,
-time:document.getElementById("jam").value
-})
-);
-
-document.getElementById("modal")
-.style.display="none";
-
+// Jalankan saat aplikasi pertama kali dimuat
 renderCalendar();
-
-}
-
-function gantiBulan(arah){
-
-currentMonth+=arah;
-
-if(currentMonth>11){
-
-currentMonth=0;
-currentYear++;
-
-}
-
-if(currentMonth<0){
-
-currentMonth=11;
-currentYear--;
-
-}
-
-renderCalendar();
-
-}
-
-window.onclick=function(e){
-
-if(e.target.id==="modal"){
-
-document.getElementById("modal")
-.style.display="none";
-
-}
-
-}
-
-function hitung(){
-
-let dua=0;
-let tiga=0;
-
-const jumlahHari=
-new Date(
-currentYear,
-currentMonth+1,
-0
-).getDate();
-
-for(let i=1;i<=jumlahHari;i++){
-
-const key=
-currentYear+"-"+currentMonth+"-"+i;
-
-const d=
-JSON.parse(localStorage.getItem(key));
-
-if(!d) continue;
-
-if(d.target==="2 JT") dua++;
-
-if(d.target==="3 JT") tiga++;
-
-}
-
-let html="";
-
-if(dua>0){
-
-html+=`
-<div class="stat">
-2 JT : ${dua}
-</div>
-`;
-
-}
-
-if(tiga>0){
-
-html+=`
-<div class="stat">
-3 JT : ${tiga}
-</div>
-`;
-
-}
-
-document.getElementById("stats")
-.innerHTML=html;
-
-}
-
-renderCalendar();
-
 </script>
 
 </body>
