@@ -114,7 +114,6 @@ td:hover {
     background: #1e293b;
 }
 
-/* Style untuk cell kosong sebelum tanggal 1 */
 .empty-cell {
     background: #0b0f19;
     cursor: default;
@@ -186,7 +185,6 @@ td:hover {
 .btn3 { background: #f59e0b; }
 .btn3:hover { background: #d97706; }
 
-/* Indikator tombol aktif/terpilih */
 .btn.active {
     border-color: #ffffff;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
@@ -276,19 +274,13 @@ function renderCalendar() {
     const tbody = document.getElementById("calendarBody");
     tbody.innerHTML = "";
 
-    // Mendapatkan total hari dalam bulan ini
     const jumlahHari = new Date(currentYear, currentMonth + 1, 0).getDate();
-    
-    // Mendapatkan hari pertama jatuh pada hari apa (0 = Minggu, 1 = Senin, dst.)
     let firstDayIndex = new Date(currentYear, currentMonth, 1).getDay();
-    
-    // Konversi agar Senin = 0, Selasa = 1, ..., Minggu = 6
     let startDay = firstDayIndex === 0 ? 6 : firstDayIndex - 1;
 
     let row = document.createElement("tr");
     let cellCount = 0;
 
-    // 1. Mengisi cell kosong sebelum tanggal 1 agar posisi hari akurat
     for (let i = 0; i < startDay; i++) {
         const tdEmpty = document.createElement("td");
         tdEmpty.classList.add("empty-cell");
@@ -296,9 +288,7 @@ function renderCalendar() {
         cellCount++;
     }
 
-    // 2. Mengisi tanggal asli 1 sampai jumlahHari
     for (let i = 1; i <= jumlahHari; i++) {
-        // Format Key Unique: YYYY-MM-DD (Gunakan padding zero agar format seragam dan aman)
         const key = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
         const data = JSON.parse(localStorage.getItem(key)) || {};
 
@@ -318,23 +308,20 @@ function renderCalendar() {
             document.getElementById("judul").innerText = "Tanggal " + i;
             document.getElementById("jam").value = data.time || "";
             
-            // Set target aktif sesuai data tersimpan
             pilihTarget(data.target || "");
             
-            document.getElementById("modal").style.style.setProperty('display', 'flex');
+            document.getElementById("modal").style.display = "flex";
         };
 
         row.appendChild(td);
         cellCount++;
 
-        // Jika row sudah terisi 7 hari, buat baris baru
         if (cellCount % 7 === 0) {
             tbody.appendChild(row);
             row = document.createElement("tr");
         }
     }
 
-    // 3. Mengisi sisa cell kosong di akhir baris terakhir (jika ada)
     if (cellCount % 7 !== 0) {
         while (cellCount % 7 !== 0) {
             const tdEmpty = document.createElement("td");
@@ -351,11 +338,9 @@ function renderCalendar() {
 function pilihTarget(target) {
     targetAktif = target;
     
-    // Reset status active pada tombol modal
     document.getElementById("btn-2jt").classList.remove("active");
     document.getElementById("btn-3jt").classList.remove("active");
     
-    // Beri highlight pada tombol yang sesuai dengan pilihan
     if (target === "2 JT") {
         document.getElementById("btn-2jt").classList.add("active");
     } else if (target === "3 JT") {
@@ -424,7 +409,6 @@ function hitung() {
     document.getElementById("stats").innerHTML = html;
 }
 
-// Jalankan saat aplikasi pertama kali dimuat
 renderCalendar();
 </script>
 
