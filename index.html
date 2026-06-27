@@ -269,7 +269,27 @@ let currentYear = currentDate.getFullYear();
 let tanggalAktif = 0;
 let targetAktif = "";
 
+// FUNGSI BARU: Memperbaiki & memindahkan data lama otomatis ke format baru
+function amankanDataLama() {
+    const jumlahHari = new Date(currentYear, currentMonth + 1, 0).getDate();
+    for (let i = 1; i <= jumlahHari; i++) {
+        const keyLama = `${currentYear}-${currentMonth}-${i}`;
+        const dataLama = localStorage.getItem(keyLama);
+        
+        if (dataLama) {
+            const keyBaru = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+            // Pindahkan ke tempat baru yang aman
+            localStorage.setItem(keyBaru, dataLama);
+            // Hapus cadangan kunci lama agar bersih
+            localStorage.removeItem(keyLama);
+        }
+    }
+}
+
 function renderCalendar() {
+    // Jalankan pengamanan data terlebih dahulu
+    amankanDataLama();
+
     document.getElementById("bulan").innerText = bulanIndonesia[currentMonth] + " " + currentYear;
     const tbody = document.getElementById("calendarBody");
     tbody.innerHTML = "";
