@@ -269,26 +269,51 @@ let currentYear = currentDate.getFullYear();
 let tanggalAktif = 0;
 let targetAktif = "";
 
-// FUNGSI BARU: Memperbaiki & memindahkan data lama otomatis ke format baru
-function amankanDataLama() {
-    const jumlahHari = new Date(currentYear, currentMonth + 1, 0).getDate();
-    for (let i = 1; i <= jumlahHari; i++) {
-        const keyLama = `${currentYear}-${currentMonth}-${i}`;
-        const dataLama = localStorage.getItem(keyLama);
+// FUNGSI BARU: Brute-Force Scanner untuk menarik semua data kemarin tanpa celah
+function tarikSemuaInputKemarin() {
+    let kunciMigrasi = [];
+
+    // 1. Pindai seluruh isi penyimpanan browser
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
         
-        if (dataLama) {
-            const keyBaru = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
-            // Pindahkan ke tempat baru yang aman
-            localStorage.setItem(keyBaru, dataLama);
-            // Hapus cadangan kunci lama agar bersih
-            localStorage.removeItem(keyLama);
+        // Lewati jika kunci bukan format penanggalan teks (mengandung karakter minus)
+        if (!key.includes("-")) continue;
+
+        try {
+            const item = JSON.parse(localStorage.getItem(key));
+            
+            // Cek apakah data tersebut berisi target inputan kamu kemarin
+            if (item && (item.target === "2 JT" || item.target === "3 JT")) {
+                const bagian = key.split("-");
+                if (bagian.length === 3) {
+                    let thn = bagian[0];
+                    let bln = parseInt(bagian[1]);
+                    let tgl = parseInt(bagian[2]);
+
+                    // Buat format kunci baru yang seragam dan anti-geser
+                    const keyBaru = `${thn}-${String(bln).padStart(2, '0')}-${String(tgl).padStart(2, '0')}`;
+                    
+                    if (key !== keyBaru) {
+                        kunciMigrasi.push({ dataLama: key, dataBaru: keyBaru, value: JSON.stringify(item) });
+                    }
+                }
+            }
+        } catch(e) {
+            // Abaikan data corrupt non-JSON
         }
     }
+
+    // 2. Eksekusi pemindahan data ke rumah baru yang stabil
+    kunciMigrasi.forEach(item => {
+        localStorage.setItem(item.dataBaru, item.value);
+        localStorage.removeItem(item.dataLama); // Bersihkan sisa kunci lama
+    });
 }
 
 function renderCalendar() {
-    // Jalankan pengamanan data terlebih dahulu
-    amankanDataLama();
+    // Jalankan penarikan data total sebelum render struktur kalender
+    tarikSemuaInputKemarin();
 
     document.getElementById("bulan").innerText = bulanIndonesia[currentMonth] + " " + currentYear;
     const tbody = document.getElementById("calendarBody");
