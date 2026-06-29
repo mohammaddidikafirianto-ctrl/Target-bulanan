@@ -65,28 +65,6 @@ body {
     transform: scale(.95);
 }
 
-/* Tombol Pemulihan Khusus */
-.recovery-zone {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
-}
-.btn-recover {
-    background: #e11d48;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-.btn-recover:hover {
-    background: #be123c;
-    transform: translateY(-2px);
-}
-
 .stats {
     display: flex;
     justify-content: center;
@@ -238,11 +216,6 @@ input[type=time] {
     <button onclick="gantiBulan(1)" class="month-btn">❯</button>
 </div>
 
-<!-- Tombol Aksi Cepat Pemulihan Data -->
-<div class="recovery-zone">
-    <button onclick="pulihkanDataOtomatis()" class="btn-recover">🛠️ PULIHKAN DATA KEMARIN</button>
-</div>
-
 <div class="stats" id="stats"></div>
 
 <div class="table-container">
@@ -296,52 +269,34 @@ let currentYear = currentDate.getFullYear();
 let tanggalAktif = 0;
 let targetAktif = "";
 
+// Format Kunci yang Aman (YYYY-MM-DD) agar data tidak terhapus saat ganti hari
 function buatKunciPenyimpanan(tahun, bulan, tanggal) {
     const formatBulan = String(bulan + 1).padStart(2, '0');
     const formatTanggal = String(tanggal).padStart(2, '0');
     return `${tahun}-${formatBulan}-${formatTanggal}`;
 }
 
-// FUNGSI SMAR RECOVERY: Memaksa memetakan kembali sisa data lama yang salah indeks
-function pulihkanDataOtomatis() {
-    let jumlahBerhasil = 0;
-    
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (!key || !key.includes("-")) continue;
+// Fungsi untuk memasukkan data dari screenshot secara otomatis
+function injeksiDataScreenshot() {
+    const dataDariScreenshot = {
+        "2026-06-03": { target: "2 JT", time: "17:38" },
+        "2026-06-05": { target: "2 JT", time: "18:15" },
+        "2026-06-07": { target: "2 JT", time: "18:26" },
+        "2026-06-09": { target: "2 JT", time: "16:35" },
+        "2026-06-11": { target: "2 JT", time: "14:37" },
+        "2026-06-17": { target: "2 JT", time: "16:48" },
+        "2026-06-23": { target: "3 JT", time: "22:20" },
+        "2026-06-24": { target: "3 JT", time: "23:26" },
+        "2026-06-25": { target: "2 JT", time: "16:40" },
+        "2026-06-26": { target: "2 JT", time: "15:35" }
+    };
 
-        try {
-            const dataMentah = localStorage.getItem(key);
-            const item = JSON.parse(dataMentah);
-
-            if (item && (item.target === "2 JT" || item.target === "3 JT")) {
-                const bagian = key.split("-");
-                if (bagian.length === 3) {
-                    let thn = bagian[0];
-                    let blnSalah = parseInt(bagian[1]); 
-                    let tgl = parseInt(bagian[2]);
-
-                    // Jika kode lama menyimpan bulan Juni sebagai "05" (indeks js), 
-                    // Kita ubah menjadi format standar baru "06" agar terbaca sempurna
-                    let blnBenar = blnSalah;
-                    if (blnSalah < 12 && key.includes(`-${String(blnSalah).padStart(2, '0')}-`)) {
-                        // Cek apakah data ini menggunakan format indeks 0 dasar
-                        blnBenar = blnSalah + 1;
-                    }
-
-                    const keyBaru = `${thn}-${String(blnBenar).padStart(2, '0')}-${String(tgl).padStart(2, '0')}`;
-                    
-                    if (key !== keyBaru) {
-                        localStorage.setItem(keyBaru, dataMentah);
-                        jumlahBerhasil++;
-                    }
-                }
-            }
-        } catch(e) { }
+    // Memasukkan data ke memori browser hanya jika tanggal tersebut masih kosong
+    for (const [key, value] of Object.entries(dataDariScreenshot)) {
+        if (!localStorage.getItem(key)) {
+            localStorage.setItem(key, JSON.stringify(value));
+        }
     }
-    
-    alert(`Pemulihan selesai! Berhasil memperbaiki ${jumlahBerhasil} data log target harian. Kalender akan dimuat ulang.`);
-    renderCalendar();
 }
 
 function renderCalendar() {
@@ -412,6 +367,7 @@ function renderCalendar() {
 
 function pilihTarget(target) {
     targetAktif = target;
+    
     document.getElementById("btn-2jt").classList.remove("active");
     document.getElementById("btn-3jt").classList.remove("active");
     
@@ -429,6 +385,7 @@ function simpan() {
     }
 
     const key = buatKunciPenyimpanan(currentYear, currentMonth, tanggalAktif);
+
     localStorage.setItem(
         key,
         JSON.stringify({
@@ -463,6 +420,7 @@ window.onclick = function(e) {
 function hitung() {
     let dua = 0;
     let tiga = 0;
+
     const jumlahHari = new Date(currentYear, currentMonth + 1, 0).getDate();
 
     for (let i = 1; i <= jumlahHari; i++) {
@@ -477,9 +435,12 @@ function hitung() {
     let html = "";
     if (dua > 0) html += `<div class="stat">2 JT : ${dua}</div>`;
     if (tiga > 0) html += `<div class="stat">3 JT : ${tiga}</div>`;
+
     document.getElementById("stats").innerHTML = html;
 }
 
+// Jalankan otomatis
+injeksiDataScreenshot();
 renderCalendar();
 </script>
 
